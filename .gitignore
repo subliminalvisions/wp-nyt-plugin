@@ -27,5 +27,27 @@ node_modules/
 .idea/*
 
 # ignore local setup files
+.DS_Store
 **/.DS_Store
 wp-config.php
+
+# thought these were ignored by above but whatever
+index.php
+license.txt
+readme.html
+wp-activate.php
+wp-admin/
+wp-blog-header.php
+wp-comments-post.php
+wp-cron.php
+wp-includes/
+wp-links-opml.php
+wp-load.php
+wp-login.php
+wp-mail.php
+wp-settings.php
+wp-signup.php
+wp-skills-assessment/
+wp-trackback.php
+xmlrpc.php
+
