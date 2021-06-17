@@ -3,11 +3,11 @@
 /**
  * Fired during plugin deactivation
  *
- * @link       https://www.janushenderson.com/
+ * @link       http://subliminalvisions.com/
  * @since      1.0.0
  *
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/includes
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/includes
  */
 
 /**
@@ -16,11 +16,11 @@
  * This class defines all code necessary to run during the plugin's deactivation.
  *
  * @since      1.0.0
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/includes
- * @author     Janus Henderson <webtechteam@janushenderson.com>
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/includes
+ * @author     Stephen Harris <subliminalvisions@gmail.com>
  */
-class Jh_Nyt_Top_Stories_Deactivator {
+class Sh_nyt_stories_Deactivator {
 
 	/**
 	 * Short Description. (use period)

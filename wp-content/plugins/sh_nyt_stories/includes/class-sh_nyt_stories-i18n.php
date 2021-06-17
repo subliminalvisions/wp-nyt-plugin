@@ -6,11 +6,11 @@
  * Loads and defines the internationalization files for this plugin
  * so that it is ready for translation.
  *
- * @link       https://www.janushenderson.com/
+ * @link       http://subliminalvisions.com/
  * @since      1.0.0
  *
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/includes
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/includes
  */
 
 /**
@@ -20,11 +20,11 @@
  * so that it is ready for translation.
  *
  * @since      1.0.0
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/includes
- * @author     Janus Henderson <webtechteam@janushenderson.com>
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/includes
+ * @author     Stephen Harris <subliminalvisions@gmail.com>
  */
-class Jh_Nyt_Top_Stories_i18n {
+class Sh_nyt_stories_i18n {
 
 
 	/**
@@ -35,7 +35,7 @@ class Jh_Nyt_Top_Stories_i18n {
 	public function load_plugin_textdomain() {
 
 		load_plugin_textdomain(
-			'jh-nyt-top-stories',
+			'sh_nyt_stories',
 			false,
 			dirname( dirname( plugin_basename( __FILE__ ) ) ) . '/languages/'
 		);

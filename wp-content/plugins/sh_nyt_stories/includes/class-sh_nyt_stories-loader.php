@@ -3,11 +3,11 @@
 /**
  * Register all actions and filters for the plugin
  *
- * @link       https://www.janushenderson.com/
+ * @link       http://subliminalvisions.com/
  * @since      1.0.0
  *
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/includes
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/includes
  */
 
 /**
@@ -17,11 +17,11 @@
  * the plugin, and register them with the WordPress API. Call the
  * run function to execute the list of actions and filters.
  *
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/includes
- * @author     Janus Henderson <webtechteam@janushenderson.com>
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/includes
+ * @author     Stephen Harris <subliminalvisions@gmail.com>
  */
-class Jh_Nyt_Top_Stories_Loader {
+class Sh_nyt_stories_Loader {
 
 	/**
 	 * The array of actions registered with WordPress.

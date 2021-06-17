@@ -5,11 +5,11 @@
  *
  * This file is used to markup the public-facing aspects of the plugin.
  *
- * @link       https://www.janushenderson.com/
+ * @link       http://subliminalvisions.com/
  * @since      1.0.0
  *
- * @package    Jh_Nyt_Top_Stories
- * @subpackage Jh_Nyt_Top_Stories/public/partials
+ * @package    Sh_nyt_stories
+ * @subpackage Sh_nyt_stories/public/partials
  */
 ?>
 
