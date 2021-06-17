@@ -62,6 +62,12 @@ class Sh_nyt_stories_Admin
    */
   private $option_name = "Sh_nyt_stories";
 
+  // public function get_hidden_key()
+  // {
+  //   include_once "partials/sh_api_key_hidden.php";
+  //   $apkey = $Sh_nyt_stories_key->hidden_key;
+  //   global $apkey;
+  // }
   /**
    * Add an options page under the Settings submenu
    *
@@ -96,7 +102,101 @@ class Sh_nyt_stories_Admin
    */
   public function display_options_page()
   {
-    include_once "partials/sh_nyt_stories-admin-display.php";
+    include_once "partials/sh_nyt_stories-admin-display.php"; ?>
+    <div class="wrap">
+        <h2>NYT Stories Settings Page</h2>
+        <form method="post" action="options.php">
+            <?php
+            settings_fields("smashing_fields");
+            do_settings_sections("smashing_fields");
+            submit_button();?>
+        </form>
+    </div> <?php
+  }
+
+  /**
+   * sections for admin
+   * @since    1.0.0
+   */
+  public function setup_sections()
+  {
+    add_settings_section(
+      "shnyt_apikey_field",
+      "API Key",
+      [$this, "section_callback"],
+      "smashing_fields"
+    );
+    // add_settings_section(
+    //   "our_second_section",
+    //   "Second Section Title",
+    //   [$this, "section_callback"],
+    //   "smashing_fields"
+    // );
+    // add_settings_section(
+    //   "our_third_section",
+    //   "Third Section Title",
+    //   [$this, "section_callback"],
+    //   "smashing_fields"
+    // );
+  }
+
+  public function section_callback($arguments)
+  {
+    echo "ideally you'd save in this field but whatever <br>";
+  }
+  public function setup_fields()
+  {
+    add_settings_field(
+      "shnyt_apikey_field",
+      "ApiKey Field ",
+      [$this, "field_callback"],
+      "smashing_fields",
+      "shnyt_apikey_field"
+    );
+  }
+  public function field_callback($arguments)
+  {
+    echo '<input name="shnyt_apikey_field" id="shnyt_apikey_field" type="text" value="' .
+      get_option("shnyt_apikey_field") .
+      '" />';
+  }
+
+  // api call
+  public function get_nyt_stories()
+  {
+    error_reporting(-1);
+    include_once "partials/sh_api_key_hidden.php";
+    // get an api key at https://developer.nytimes.com/ , and put in file like so:
+    // global $hidden_api_key;
+    // $hidden_api_key = "YourApiKeyValueHere";
+
+    global $api_key;
+    $api_key = $hidden_api_key;
+
+    // if (isset($hidden_api_key)):
+    //   echo "<br>api key: " . $hidden_api_key . "<br>";
+    // else:
+    //   echo "<br>api key: " . '$hidden_api_key is empty';
+    // endif;
+    // $url = "https://api.nytimes.com/svc/topstories/v2/business.json?";
+    // echo $nyt_url;
+    // echo "<br/>";
+    // $arguments = [
+    //   "api-key" => $hidden_api_key
+    // ];
+    // $url_parameters = [];
+    // foreach ($arguments as $key => $value) {
+    //   $url_parameters[] = $key . "=" . $value;
+    // }
+    // $url = $url . implode("&", $url_parameters);
+    $url =
+      "https://api.nytimes.com/svc/topstories/v2/business.json?api-key=" .
+      $api_key;
+    $response = file_get_contents($url);
+    if ($response) {
+      // print_r($response);
+      // response is defo there but printing it is ugly
+    }
   }
 
   /**

@@ -51,3 +51,4 @@ wp-skills-assessment/
 wp-trackback.php
 xmlrpc.php
 
+wp-content/plugins/sh_nyt_stories/admin/partials/sh_api_key_hidden.php
