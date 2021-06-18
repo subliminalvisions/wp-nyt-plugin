@@ -246,7 +246,7 @@ class Sh_nyt_stories_Admin
         foreach ($response_results as $node) {
           // $response_results;
           // Initialize the post ID to -1. This indicates no action has been taken.
-          // $post_id = -1;
+          $post_id = -1;
           // $post_id = $node["id"];
 
           // Setup the author, slug, and title for the post
@@ -255,14 +255,12 @@ class Sh_nyt_stories_Admin
           if ($j = 1) {
             var_dump($node);
           }
-          // $title = $node["title"];
-          $title = "test";
-          $slug = $title;
-          // $slug = $node['title'];
-          // $slug = preg_replace("/[[:space:]]+/", "-", $title);
-          // $slug = strtolower($slug);
+          $title = $node["title"];
+          $slug = preg_replace("/[[:space:]]+/", "-", $title);
+          $slug = strtolower($slug);
+          $j++;
 
-          // need post date
+          // need to set post date
 
           // If the page doesn't already exist, then create it
           if (null == get_page_by_title($title)) {
@@ -283,7 +281,6 @@ class Sh_nyt_stories_Admin
             // Arbitrarily use -2 to indicate that the page with the title already exists
             $post_id = -2;
           } // end if
-          $j++;
         }
         //       $author_id = 1;
         //       $title = "My Example Post";
