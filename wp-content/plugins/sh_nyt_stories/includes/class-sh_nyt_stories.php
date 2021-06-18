@@ -167,15 +167,23 @@ class Sh_nyt_stories
     $this->loader->add_action("admin_init", $plugin_admin, "register_setting");
     $this->loader->add_action("admin_init", $plugin_admin, "setup_sections");
     $this->loader->add_action("admin_init", $plugin_admin, "setup_fields");
-    $this->loader->add_action("admin_init", $plugin_admin, "get_nyt_stories");
 
+    // $this->loader->add_action("init", $plugin_admin, "get_nyt_stories");
+    $this->loader->add_action(
+      "init",
+      $plugin_admin,
+      "add_nyt_story_content_type"
+    );
+    $this->loader->add_action(
+      "admin_menu",
+      $plugin_admin,
+      "create_nyt_story_nodes"
+    );
     // $this->loader->add_action(
-    //   "admin_init",
+    //   "init",
     //   $plugin_admin,
-    //   "nyt_custom_post_type"
+    //   "run_get_stories_only_once"
     // );
-
-    $this->loader->add_action("init", $plugin_admin, "new_cpt_stories");
 
     $this->loader->add_action(
       "admin_enqueue_scripts",

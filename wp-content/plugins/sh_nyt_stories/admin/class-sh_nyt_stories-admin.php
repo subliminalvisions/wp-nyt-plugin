@@ -126,18 +126,32 @@ class Sh_nyt_stories_Admin
       [$this, "section_callback"],
       "smashing_fields"
     );
-    // add_settings_section(
-    //   "our_second_section",
-    //   "Second Section Title",
-    //   [$this, "section_callback"],
-    //   "smashing_fields"
-    // );
+    add_settings_section(
+      "our_second_section",
+      "Second Section Title",
+      [$this, "section_callback"],
+      "smashing_fields"
+    );
     // add_settings_section(
     //   "our_third_section",
     //   "Third Section Title",
     //   [$this, "section_callback"],
     //   "smashing_fields"
     // );
+  }
+
+  public function section_two_callback($arguments)
+  {
+    /*
+    ?>   
+   <form action="<?php echo admin_url(
+     "?page=sh_nyt_stories"
+   ); ?>" method="post">
+     <input type="hidden" name="action" value="programmatically_create_post">
+     <input type="submit" value="Add Post Programmatically">
+   </form>
+   <?php
+   */
   }
 
   public function section_callback($arguments)
@@ -161,9 +175,30 @@ class Sh_nyt_stories_Admin
       '" />';
   }
 
+  //   public function run_get_stories_only_once()
+  //   {
+  //     if (did_action("init") >= 2) {
+  //       return;
+  //     }
+  //
+  //     if (!get_option("run_get_nycc_stories_only_once")) {
+  //       // get_nyt_stories(); // Run the function
+  //       // Run the function
+  //       programmatically_create_post();
+  //       // $post_created = programmatically_create_post();
+  //       update_option("run_get_nycc_stories_only_once", true);
+  //     }
+  //   }
+
   // api call
   public function get_nyt_stories()
   {
+    echo "test nyt stories";
+  }
+
+  public function create_nyt_story_nodes()
+  {
+    static $previous_reesponse;
     error_reporting(-1);
     include_once "partials/sh_api_key_hidden.php";
     // get an api key at https://developer.nytimes.com/ , and put in file like so:
@@ -173,31 +208,180 @@ class Sh_nyt_stories_Admin
     global $api_key;
     $api_key = $hidden_api_key;
 
-    // if (isset($hidden_api_key)):
-    //   echo "<br>api key: " . $hidden_api_key . "<br>";
-    // else:
-    //   echo "<br>api key: " . '$hidden_api_key is empty';
-    // endif;
-    // $url = "https://api.nytimes.com/svc/topstories/v2/business.json?";
-    // echo $nyt_url;
-    // echo "<br/>";
-    // $arguments = [
-    //   "api-key" => $hidden_api_key
-    // ];
-    // $url_parameters = [];
-    // foreach ($arguments as $key => $value) {
-    //   $url_parameters[] = $key . "=" . $value;
-    // }
-    // $url = $url . implode("&", $url_parameters);
     $url =
       "https://api.nytimes.com/svc/topstories/v2/business.json?api-key=" .
       $api_key;
-    $response = file_get_contents($url);
-    if ($response) {
-      // print_r($response);
-      // response is defo there but printing it is ugly
+
+    if ($previous_reesponse !== null) {
+      echo $previous_reesponse;
+      return $previous_reesponse;
+    } else {
+      $response = file_get_contents($url);
+      // $response = "";
+
+      if ($response) {
+        $response = json_decode($response, true);
+
+        if ($response["status"] == "OK") {
+          $response_results = [];
+          $i = 1;
+          foreach ($response["results"] as $story) {
+            $response_results[$story["title"]] = esc_attr($story["title"]);
+            $response_results[$story["url"]] = esc_attr($story["url"]);
+            $response_results[$story["byline"]] = esc_attr($story["byline"]);
+            // $response_results[$story["id"]] = $i;
+            $response_results[$story["published_date"]] = esc_attr(
+              $story["published_date"]
+            );
+            $response_results[$story["abstract"]] = esc_attr(
+              $story["abstract"]
+            );
+            $i++;
+          }
+          // print_r($response_results);
+        }
+        $j = 1;
+
+        // foreach ($response_results as $node) {
+        foreach ($response_results as $node) {
+          // $response_results;
+          // Initialize the post ID to -1. This indicates no action has been taken.
+          // $post_id = -1;
+          // $post_id = $node["id"];
+
+          // Setup the author, slug, and title for the post
+          $author_id = 1;
+
+          if ($j = 1) {
+            var_dump($node);
+          }
+          // $title = $node["title"];
+          $title = "test";
+          $slug = $title;
+          // $slug = $node['title'];
+          // $slug = preg_replace("/[[:space:]]+/", "-", $title);
+          // $slug = strtolower($slug);
+
+          // need post date
+
+          // If the page doesn't already exist, then create it
+          if (null == get_page_by_title($title)) {
+            // Set the page ID so that we know the page was created successfully
+
+            $post_id = wp_insert_post([
+              "comment_status" => "closed",
+              "ping_status" => "closed",
+              "post_author" => $author_id,
+              "post_name" => $slug,
+              "post_title" => $title,
+              "post_status" => "publish",
+              "post_type" => "post",
+            ]);
+
+            // Otherwise, we'll stop and set a flag
+          } else {
+            // Arbitrarily use -2 to indicate that the page with the title already exists
+            $post_id = -2;
+          } // end if
+          $j++;
+        }
+        //       $author_id = 1;
+        //       $title = "My Example Post";
+        //       $slug = preg_replace("/[[:space:]]+/", "-", $title);
+        //       $slug = strtolower($slug);
+        //
+        //       $post_array = [
+        //         "comment_status" => "closed",
+        //         "ping_status" => "closed",
+        //         "post_author" => $author_id,
+        //         "post_name" => $slug,
+        //         "post_title" => $title,
+        //         "post_status" => "publish",
+        //         "post_type" => "sh_nyt_stories",
+        //       ];
+        $previous_reesponse = $response;
+      }
     }
+
+    // Initialize the post ID to -1. This indicates no action has been taken.
+    $post_id = -1;
+
+    // Setup the author, slug, and title for the post
+    $author_id = 1;
+    $slug = "example-post";
+    $title = "My Example Post";
+
+    // If the page doesn't already exist, then create it
+    if (null == get_page_by_title($title)) {
+      // Set the page ID so that we know the page was created successfully
+      $post_id = wp_insert_post([
+        "comment_status" => "closed",
+        "ping_status" => "closed",
+        "post_author" => $author_id,
+        "post_name" => $slug,
+        "post_title" => $title,
+        "post_status" => "publish",
+        "post_type" => "post",
+      ]);
+
+      // Otherwise, we'll stop and set a flag
+    } else {
+      // Arbitrarily use -2 to indicate that the page with the title already exists
+      $post_id = -2;
+    } // end if
   }
+
+  /**
+   * A function used to programmatically create a post in WordPress. The slug, author ID, and title
+   * are defined within the context of the function.
+   *
+   * @returns -1 if the post was never created, -2 if a post with the same title exists, or the ID
+   *          of the post if successful.
+   */
+  public function programmatically_create_post()
+  {
+    static $result;
+
+    // Function has already run
+    // if ($result !== null) {
+    //   return $result;
+    // }
+
+    // Initialize the page ID to -1. This indicates no action has been taken.
+    $post_id = 1;
+
+    // Setup the author, slug, and title for the post
+    $author_id = 1;
+    $slug = "example-post";
+    $title = "My Example Posted ";
+
+    // If the page doesn't already exist, then create it
+    if ($result !== null) {
+      // if (null == get_page_by_title($title)) {
+      // Set the post ID so that we know the post was created successfully
+      $post_id = wp_insert_post([
+        "comment_status" => "closed",
+        "ping_status" => "closed",
+        "post_author" => $author_id,
+        "post_name" => $slug,
+        "post_title" => $title,
+        "post_status" => "publish",
+        // "post_type" => "sh_nyt_stories",
+        "post_type" => "nyt_story",
+      ]);
+
+      // Otherwise, we'll stop
+    } else {
+      // Arbitrarily use -2 to indicate that the page with the title already exists
+      $post_id = -2;
+    } // end if
+
+    // Lot of work here to determine $result
+    $result = $post_id;
+
+    return $result;
+  } // end programmatically_create_post
+  // add_filter( 'after_setup_theme', 'programmatically_create_post' );
 
   /**
    * Register the stylesheets for the admin area.
@@ -262,10 +446,10 @@ class Sh_nyt_stories_Admin
    * @access 	public
    * @uses 	register_post_type()
    */
-  public static function new_cpt_stories()
+  public static function add_nyt_story_content_type()
   {
     $cap_type = "post";
-    $plural = "NYT_Stories";
+    $plural = "NYT Stories";
     $single = "NYT_Story";
     $cpt_name = "NYT_Story";
 
